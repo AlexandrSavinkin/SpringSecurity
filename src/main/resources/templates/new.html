@@ -3,26 +3,26 @@
 
 <head>
     <meta content="charset=UTF-8">
-    <title>New user</title>
+    <title>Новый пользователь</title>
 </head>
 <body>
 <form th:method="POST" th:action="@{/admin}" th:object="${user}" >
 
-    <label for="username">Enter userName: </label>
+    <label for="username">Введите имя ползователя: </label>
     <input type="text" th:charset="utf-8" th:field="*{username}" id="username"/>
     <br/>
 
-    <label for="password">Enter password: </label>
+    <label for="password">Введите пароль: </label>
     <input type="text" th:charset="utf-8" th:field="*{password}" id="password"/>
     <br/>
 
-    <label for="name">Enter name: </label>
+    <label for="name">Введите имя: </label>
     <input type="text" th:charset="utf-8" th:field="*{name}" id="name"/>
     <br/>
-    <label for="surname">Enter lastName: </label>
+    <label for="surname">Введите фамилию: </label>
     <input type="text" th:field="*{lastName}" id="surname"/>
     <br/>
-    <label for="age">Enter age: </label>
+    <label for="age">Введите возраст: </label>
     <input type="text" th:field="*{age}" id="age"/>
 
     <br/>

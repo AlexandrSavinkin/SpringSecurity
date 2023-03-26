@@ -11,8 +11,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+
 
 
 @Controller
@@ -42,7 +41,12 @@ public class UsersController {
     @GetMapping("/admin")
     public String getAllUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
-        return "users";
+        return "all_users";
+    }
+    @DeleteMapping(value = "/delete/{id}")
+    public String deleteUser(@PathVariable("id") int id) {
+        userService.delete(id);
+        return "redirect:/admin";
     }
 
     @GetMapping("/admin/{id}")
@@ -60,8 +64,7 @@ public class UsersController {
     @GetMapping("/admin/new")
     public String newPerson(Model model) {
         model.addAttribute("user", new User());
-//        List<Role> roles = (List<Role>) roleRepository.findAll();
-        Collection<Role> roles = (Collection<Role>)roleRepository.findAll();
+        Collection<Role> roles = roleRepository.findAll();
         model.addAttribute("allRoles", roles);
         return "new";
     }
@@ -72,13 +75,19 @@ public class UsersController {
         return "redirect:/admin";
     }
 
-    @GetMapping("admin/{id}/edit")
+    @GetMapping("/edit/{id}")
     public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("user", userService.show(id));
         return "edit";
+
+    }
+    @PatchMapping(value = "/edit")
+    public String editSubmit(@ModelAttribute User user) {
+        userService.update(user);
+        return "redirect:/admin";
     }
 
-    @PatchMapping("admin/{id}")
+    @PatchMapping("admin/edit/{id}")
     public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
         userService.update(id, user);
         return "redirect:/admin";

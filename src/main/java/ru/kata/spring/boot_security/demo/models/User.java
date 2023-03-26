@@ -36,26 +36,6 @@ public class User implements UserDetails {
     public User() {
 
     }
-
-    public User(int id, String username, String password, String name, String lastName, int age) {
-        this.id = id;
-        this.username=username;
-        this.password=password;
-        this.name = name;
-        this.lastname = lastName;
-        this.age = age;
-    }
-
-    public User(String username, String password, String name, String lastName, int age) {
-        this.username=username;
-        this.password=password;
-        this.name = name;
-        this.lastname = lastName;
-        this.age = age;
-    }
-
-
-
     public int getId() {
         return id;
     }
@@ -95,16 +75,6 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", lastName='" + lastname + '\'' +
-                ", age=" + age +
-                '}';
     }
 
     @Override

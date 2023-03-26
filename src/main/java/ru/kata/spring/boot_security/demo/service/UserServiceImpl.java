@@ -26,11 +26,16 @@ public class UserServiceImpl implements UserService {
 
     @PersistenceContext
     private EntityManager entityManager;
+    private UserRepository userRepository;
 
+    @Autowired
+    public void setUserRepository(UserRepository userRepository){
+        this.userRepository=userRepository;
+    }
 
     @Override
     public List<User> getAllUsers() {
-        return entityManager.createQuery("SELECT user from User user").getResultList();
+        return entityManager.createQuery("from User user").getResultList();
     }
 
     @Override
@@ -40,21 +45,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
-        user.setPassword((new BCryptPasswordEncoder()).encode(user.getPassword())); //
+        user.setPassword((new BCryptPasswordEncoder()).encode(user.getPassword()));
         entityManager.persist(user);
     }
 
     @Override
-    public void update(int id, User updatedUser) {
-        User userToBeUpdated = show(id);
-        entityManager.detach(userToBeUpdated);
-        userToBeUpdated.setUsername(updatedUser.getUsername());
-        userToBeUpdated.setPassword(updatedUser.getPassword());
-        userToBeUpdated.setName(updatedUser.getName());
-        userToBeUpdated.setLastName(updatedUser.getLastName());
-        userToBeUpdated.setAge(updatedUser.getAge());
-        userToBeUpdated.setRoles(userToBeUpdated.getRoles());
-        entityManager.merge(userToBeUpdated);
+    public void update(int id, User updated) {
+        User userUpdated = show(id);
+        entityManager.detach(userUpdated);
+        userUpdated.setUsername(updated.getUsername());
+        userUpdated.setPassword(updated.getPassword());
+        userUpdated.setName(updated.getName());
+        userUpdated.setLastName(updated.getLastName());
+        userUpdated.setAge(updated.getAge());
+        userUpdated.setRoles(userUpdated.getRoles());
+        entityManager.merge(userUpdated);
     }
 
     @Override
@@ -62,17 +67,18 @@ public class UserServiceImpl implements UserService {
         entityManager.remove(show(id));
     }
 
-        // Для UserDetailsService
-    private UserRepository userRepository;
 
-    @Autowired
-    public void setUserRepository(UserRepository userRepository){
-        this.userRepository=userRepository;
-    }
+
     public User findByUsername(String username){
         return userRepository.findByUsername(username);
     }
-// Переводим нашего юзера в юзер, которого понимает Spring Security
+
+    @Override
+    public void update(User user) {
+        entityManager.merge(user);
+
+    }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -83,7 +89,7 @@ public class UserServiceImpl implements UserService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){            //этот метод берет пачку ролей и из них делает GrantedAuthorities
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
 
