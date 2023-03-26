@@ -49,11 +49,7 @@ public class UsersController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.show(id));
-        return "show";
-    }
+
 
     @GetMapping("/user/{id}")
     public String showForUser(@PathVariable("id") int id, Model model) {
