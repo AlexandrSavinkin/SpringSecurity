@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
 
-    //для метода из сервиса
+
     private UserServiceImpl userServiceImpl;
 
     @Autowired
@@ -47,7 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().successHandler(successUserHandler)
                 .permitAll()
-//                .formLogin(form -> form.loginPage("/login").successHandler(successUserHandler))
                 .and()
                 .logout()//.logoutSuccessUrl("/")
                 .permitAll()
